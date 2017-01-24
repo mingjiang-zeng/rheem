@@ -15,7 +15,7 @@
         <hadoop.version>2.2.0</hadoop.version>
         <graphchi.version>0.2.2</graphchi.version>
         <antlr.version>4.5.3</antlr.version>
-        <external.platforms.scope>provided</external.platforms.scope>
+        <external.platforms.scope>compile</external.platforms.scope>
     </properties>
 
     <groupId>org.qcri.rheem</groupId>
