@@ -8,9 +8,11 @@ import org.qcri.rheem.core.types.DataSetType;
 /**
  * {@link UnarySource} that provides the tuples from a database table.
  */
-public class TableSource extends UnarySource<Record> {
+public abstract class TableSource extends UnarySource<Record> {
 
     private final String tableName;
+    protected static String delimiter = ",";
+
 
     public String getTableName() {
         return tableName;
@@ -23,13 +25,37 @@ public class TableSource extends UnarySource<Record> {
      * @param columnNames names of the columns in the tables; can be omitted but allows to inject schema information
      *                    into Rheem, so as to allow specific optimizations
      */
-    public TableSource(String tableName, String... columnNames) {
-        this(tableName, createOutputDataSetType(columnNames));
+    public TableSource(String tableName, String... colNames) {
+        this(tableName, createOutputDataSetType(colNames));
+        delimiter = ",";
+    }
+
+    public TableSource(String tableName,String d, String... colNames)  {
+        this(tableName, createOutputDataSetType(colNames));
+        delimiter = d;
     }
 
     public TableSource(String tableName, DataSetType<Record> type) {
         super(type);
         this.tableName = tableName;
+
+    }
+
+    public void setDelimiter(String d){
+        delimiter = d;
+    }
+
+    public String getDelimiter(){
+        return delimiter;
+    }
+
+
+   public String getInputUrl() {
+        return tableName; // in case of csv files we assume file name is the full path of a csv file
+    }
+
+    public RecordType getSchema() {
+        return (RecordType)this.getType().getDataUnitType();
     }
 
     /**
